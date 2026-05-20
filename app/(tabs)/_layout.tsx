@@ -1,21 +1,21 @@
+// app/(tabs)/_layout.tsx
+import CustomTabBar from "@/components/custom-tab-bar";
 import { TAB_ICONS } from "@/constants/data";
-import { colors } from "@/constants/theme";
-import { Icon, Label, NativeTabs } from "expo-router/unstable-native-tabs";
+import { Tabs } from "expo-router";
 
-export default function TabsLayout() {
+export default function TabLayout() {
   return (
-    <NativeTabs>
-      {Object.entries(TAB_ICONS).map(([name, config]) => (
-        <NativeTabs.Trigger
-          key={name}
-          name={name}
-          options={{ selectedIconColor: colors.color_primary }}
-        >
-          <Label>{config.title}</Label>
-
-          <Icon sf={config.sf} />
-        </NativeTabs.Trigger>
+    <Tabs
+      tabBar={(props) => <CustomTabBar {...props} />}
+      screenOptions={{ headerShown: false }}
+    >
+      {TAB_ICONS.map((tab, index) => (
+        <Tabs.Screen
+          key={tab.name}
+          name={tab.name}
+          options={{ title: tab.title }}
+        />
       ))}
-    </NativeTabs>
+    </Tabs>
   );
 }

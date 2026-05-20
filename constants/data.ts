@@ -1,54 +1,27 @@
 import { Location, Profile, Tool, ToolEvent } from "./types";
 
-export const TAB_ICONS = {
-  index: {
+export const TAB_ICONS = [
+  {
+    name: "index",
     title: "Home",
-    sf: {
-      default: "house",
-      selected: "house.fill",
-    },
-    android: {
-      default: "home-outline",
-      selected: "home",
-    },
+    icon: "home",
   },
-
-  inventory: {
+  {
+    name: "inventory",
     title: "Inventory",
-    sf: {
-      default: "cube.box",
-      selected: "cube.box.fill",
-    },
-    android: {
-      default: "cube-outline",
-      selected: "cube",
-    },
+    icon: "box",
   },
-
-  account: {
+  {
+    name: "account",
     title: "Account",
-    sf: {
-      default: "person",
-      selected: "person.fill",
-    },
-    android: {
-      default: "person-outline",
-      selected: "person",
-    },
+    icon: "home",
   },
-
-  settings: {
+  {
+    name: "settings",
     title: "Settings",
-    sf: {
-      default: "gearshape",
-      selected: "gearshape.fill",
-    },
-    android: {
-      default: "settings-outline",
-      selected: "settings",
-    },
+    icon: "gear",
   },
-} as const;
+];
 
 export const HOME_USER = {
   name: "Colin Billingsley",
