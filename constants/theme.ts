@@ -1,3 +1,7 @@
+export const colors = {
+  color_primary: "#ff4c0f",
+};
+
 export const spacing = {
   1: 4,
   2: 8,

@@ -1,9 +1,33 @@
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/preflight.css" layer(base);
 @import "tailwindcss/utilities.css";
- 
+
 @import "nativewind/theme";
 
 @theme {
-    --color-primary: #ffff;
+  --color-primary: #ff4c0f;
+  --color-secondary: #ff9470;
+  --color-available: #009307;
+  --color-unavailable: #005bb5;
+  --color-out-of-order: #c20000;
+  --color-subtext: #767676;
+
+  --font-sans-regular: sans-regular;
+  --font-sans-italic: sans-italic;
+  --font-sans-light: sans-light;
+  --font-sans-light-italic: sans-light-italic;
+  --font-sans-medium: sans-medium;
+  --font-sans-medium-italic: sans-medium-italic;
+  --font-sans-semibold: sans-semi-bold;
+  --font-sans-semibold-italic: sans-semi-bold-italic;
+  --font-sans-bold: sans-bold;
+  --font-sans-bold-italic: sans-bold-italic;
+  --font-sans-extrabold: sans-extra-bold;
+  --font-sans-extrabold-italic: sans-extra-bold-italic;
 }
+
+/* @layer components {
+  .home-tool-card {
+    @apply;
+  }
+} */
