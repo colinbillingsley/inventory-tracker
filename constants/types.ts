@@ -1,4 +1,4 @@
-export type ToolStatus = "available" | "unavailable" | "out_of_order";
+export type ToolStatus = "available" | "checked_out" | "out_of_service";
 
 export type ToolEventType =
   | "created"

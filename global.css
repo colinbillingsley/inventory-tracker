@@ -8,9 +8,11 @@
   --color-primary: #ff4c0f;
   --color-secondary: #ff9470;
   --color-available: #009307;
-  --color-unavailable: #005bb5;
-  --color-out-of-order: #c20000;
+  --color-checked-out: #e3d700;
+  --color-checked-out-foreground: #a79f00;
+  --color-out-of-service: #c20000;
   --color-subtext: #767676;
+  --color-border: #c3c3c3;
 
   --font-sans-regular: sans-regular;
   --font-sans-italic: sans-italic;

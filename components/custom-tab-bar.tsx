@@ -1,6 +1,6 @@
 // components/navigation/CustomTabBar.tsx
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { Home, Settings, User, Wrench } from "lucide-react-native";
+import { LayoutDashboard, Menu, User, Warehouse } from "lucide-react-native";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -9,24 +9,21 @@ export default function CustomTabBar({ state, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
 
   const icons = {
-    index: Home,
-    inventory: Wrench,
+    index: LayoutDashboard,
+    inventory: Warehouse,
     account: User,
-    settings: Settings,
+    menu: Menu,
   };
 
   const labels = {
-    index: "Home",
+    index: "Dashboard",
     inventory: "Inventory",
     account: "Account",
-    settings: "Settings",
+    menu: "Menu",
   };
 
   return (
-    <View
-      className="flex-row bg-white pt-2"
-      style={{ paddingBottom: insets.bottom }}
-    >
+    <View className={`flex-row items-center bg-white`}>
       {state.routes.map((route, index) => {
         const isFocused = state.index === index;
         const Icon = icons[route.name as keyof typeof icons];
@@ -42,19 +39,21 @@ export default function CustomTabBar({ state, navigation }: BottomTabBarProps) {
             key={route.key}
             onPress={onPress}
             activeOpacity={0.8}
-            className={`flex-1 items-center gap-1`}
+            className={`p-4 items-center gap-1 flex-1 border-t-2 ${isFocused ? "bg-primary/5 border-t-primary" : "bg-white border-t-transparent"}`}
+            style={{ paddingBottom: insets.bottom }}
           >
             <View
-              className={`p-2 rounded-xl transition-[colors, transform] duration-300 ${isFocused ? "bg-primary -translate-y-1" : ""}`}
+              className={`p-3 rounded-full transition-[colors, transform] duration-200 ${isFocused ? "bg-primary -translate-y-1" : ""}`}
             >
               <Icon
                 size={22}
-                className={`transition-[colors] duration-300 ${isFocused ? "text-white" : "text-black"}`}
+                className={`transition-[colors] duration-200`}
+                color={`${isFocused ? "#ffffff" : "#000000"}`}
               />
             </View>
 
             <Text
-              className={`font-sans-medium text-xs capitalize transition-[colors, transform] duration-300 ${
+              className={`font-sans-medium text-xs capitalize transition-[colors, transform] duration-200 ${
                 isFocused ? "text-primary -translate-y-1" : "text-black"
               }`}
             >
