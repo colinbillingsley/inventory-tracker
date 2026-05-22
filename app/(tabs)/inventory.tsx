@@ -1,12 +1,14 @@
-import { tools } from "@/constants/data";
-import { colors } from "@/constants/theme";
-import { Tool } from "@/constants/types";
-import { MapPin, User } from "lucide-react-native";
+import {
+  MapPin,
+  Plus,
+  ScanLine,
+  SlidersHorizontal,
+  User,
+} from "lucide-react-native";
 import { styled } from "nativewind";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   FlatList,
-  Pressable,
   Text,
   TextInput,
   TouchableOpacity,
@@ -14,167 +16,185 @@ import {
 } from "react-native";
 import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 
+import CustomPressable from "@/components/custom-ui/custom-pressable";
+import { tools } from "@/constants/data";
+import { colors } from "@/constants/theme";
+import { Tool } from "@/constants/types";
+
 const SafeAreaView = styled(RNSafeAreaView);
 
 const FILTERS = [
-  {
-    id: "all",
-    name: "All",
-  },
-  {
-    id: "checked_out",
-    name: "Checked Out",
-  },
-  {
-    id: "out_of_service",
-    name: "Out of Service",
-  },
-  {
-    id: "available",
-    name: "Available",
-  },
+  { id: "all", name: "All" },
+  { id: "available", name: "Available" },
+  { id: "checked_out", name: "Checked Out" },
+  { id: "out_of_service", name: "Out of Service" },
 ];
 
-const displayStatusStyled = (status: string) => {
-  switch (status) {
-    case "available":
-      return (
-        <Text className="font-sans-bold text-available bg-available/10 px-4 py-2 rounded-full">
-          Available
-        </Text>
-      );
-    case "checked_out":
-      return (
-        <Text className="font-sans-bold text-checked-out-foreground bg-checked-out/10 px-4 py-2 rounded-full">
-          Checked Out
-        </Text>
-      );
-    case "out_of_service":
-      return (
-        <Text className="font-sans-bold text-out-of-service bg-out-of-service/10 px-4 py-2 rounded-full">
-          Out of Order
-        </Text>
-      );
-    default:
-      return (
-        <Text className="font-sans-bold text-primary bg-primary/10 px-4 py-2 rounded-full">
-          Unknown
-        </Text>
-      );
-  }
-};
+const StatusBadge = ({ status }: { status: string }) => {
+  const map: Record<string, any> = {
+    available: "text-available bg-available/10",
+    checked_out: "text-checked-out-foreground bg-checked-out/10",
+    out_of_service: "text-out-of-service bg-out-of-service/10",
+  };
 
-type FilterProps = {
-  id: string;
-  name: string;
-  selectedFilter: string;
-  setSelectedFilter: (x: string) => void;
-};
+  const labelMap: Record<string, string> = {
+    available: "Available",
+    checked_out: "Checked Out",
+    out_of_service: "Out of Service",
+  };
 
-const Filter = ({
-  selectedFilter,
-  setSelectedFilter,
-  ...filter
-}: FilterProps) => {
-  const isSelected = filter.id === selectedFilter;
   return (
-    <Pressable
-      onPress={() => {
-        setSelectedFilter(filter.id);
-      }}
-      className={`px-4 py-2 border rounded-full ${isSelected ? "bg-primary border-primary" : "bg-white"}`}
+    <Text
+      className={`text-xs font-sans-bold px-3 py-1 rounded-full ${map[status] || "bg-primary/10 text-primary"}`}
     >
-      <Text
-        className={`font-sans-medium ${isSelected ? "text-white" : "text-black"}`}
-      >
-        {filter.name}
-      </Text>
-    </Pressable>
+      {labelMap[status] || "Unknown"}
+    </Text>
   );
 };
 
-type ItemProps = { item: Tool };
-const Item = ({ item }: ItemProps) => (
-  <TouchableOpacity className="p-4 h-32 justify-between border rounded bg-white">
-    <View className="flex flex-row justify-between">
-      <View className="gap-1">
-        <Text className="font-sans-bold">{item.name}</Text>
-        <Text className="font-sans-medium text-sm text-subtext">
-          #{item.serial_number}
-        </Text>
+const FilterTab = ({ item, selected, onPress }: any) => {
+  const active = selected === item.id;
+
+  return (
+    <TouchableOpacity
+      onPress={() => onPress(item.id)}
+      className={`px-4 py-2 rounded-full border mr-2 ${
+        active ? "bg-primary border-primary" : "bg-white border-border"
+      }`}
+    >
+      <Text
+        className={
+          active ? "text-white font-sans-medium" : "text-black font-sans-medium"
+        }
+      >
+        {item.name}
+      </Text>
+    </TouchableOpacity>
+  );
+};
+
+const InventoryCard = ({ item }: { item: Tool }) => {
+  return (
+    <TouchableOpacity className="bg-white border border-border rounded-lg p-4 mb-3 flex-row justify-between">
+      {/* Left accent based on status */}
+      <View
+        className={`absolute left-0 top-0 bottom-0 w-1 rounded-l-lg ${
+          item.status === "available"
+            ? "bg-available"
+            : item.status === "checked_out"
+              ? "bg-checked-out"
+              : "bg-out-of-service"
+        }`}
+      />
+
+      {/* Main info */}
+      <View className="flex-1 pl-3 gap-2">
+        <View className="flex-row justify-between items-start">
+          <View>
+            <Text className="font-sans-bold text-base">{item.name}</Text>
+            <Text className="text-subtext text-sm">#{item.serial_number}</Text>
+          </View>
+
+          <StatusBadge status={item.status} />
+        </View>
+
+        {/* Metadata */}
+        <View className="flex-row items-center gap-4 mt-2">
+          {item.assignedToUser && (
+            <View className="flex-row items-center gap-1">
+              <User size={14} color={colors.color_subtext} />
+              <Text className="text-sm text-subtext">
+                {item.assignedToUser}
+              </Text>
+            </View>
+          )}
+
+          {item.current_location_id && (
+            <View className="flex-row items-center gap-1">
+              <MapPin size={14} color={colors.color_subtext} />
+              <Text className="text-sm text-subtext">
+                {item.current_location_id}
+              </Text>
+            </View>
+          )}
+        </View>
       </View>
-      <View>{displayStatusStyled(item.status)}</View>
-    </View>
-
-    <View className="h-[1px] w-full bg-primary" />
-
-    <View className="flex flex-row items-center gap-4">
-      {item.assignedToUser ? (
-        <View className="flex-row gap-1">
-          <User size={15} color={colors.color_subtext} strokeWidth={2} />
-          <Text>{item.assignedToUser}</Text>
-        </View>
-      ) : (
-        <></>
-      )}
-
-      {item.current_location_id ? (
-        <View className="flex-row gap-1">
-          <MapPin size={15} color={colors.color_subtext} strokeWidth={2} />
-          <Text>{item.current_location_id}</Text>
-        </View>
-      ) : (
-        <></>
-      )}
-    </View>
-  </TouchableOpacity>
-);
+    </TouchableOpacity>
+  );
+};
 
 const InventoryScreen = () => {
   const [search, setSearch] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("all");
 
+  const filteredTools = useMemo(() => {
+    return tools.filter((tool) => {
+      const matchesSearch =
+        tool.name.toLowerCase().includes(search.toLowerCase()) ||
+        tool.serial_number?.toLowerCase().includes(search.toLowerCase());
+
+      const matchesFilter =
+        selectedFilter === "all" || tool.status === selectedFilter;
+
+      return matchesSearch && matchesFilter;
+    });
+  }, [search, selectedFilter]);
+
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-white pl-5 pt-5 pr-5">
-      <Text className="font-sans-extrabold text-2xl mb-4">Inventory</Text>
+      {/* Header */}
+      <View className="mb-4">
+        <Text className="font-sans-extrabold text-2xl mb-3">Inventory</Text>
 
-      <TextInput
-        onChangeText={setSearch}
-        value={search}
-        placeholder="Search tools..."
-        className="border p-4 rounded font-sans-regular mb-4 bg-white"
-      />
+        {/* Action Row */}
+        <View className="flex-row items-center gap-2 mb-3">
+          {/* Search */}
+          <TextInput
+            value={search}
+            onChangeText={setSearch}
+            placeholder="Search tools..."
+            className="flex-1 border border-border rounded-lg p-3 font-sans-regular bg-white"
+          />
 
-      <View className="mb-4 justify-center items-center">
+          {/* Scan */}
+          <CustomPressable className="p-2 border border-border rounded-lg">
+            <ScanLine size={20} color={colors.color_black} />
+          </CustomPressable>
+
+          {/* Filter */}
+          <CustomPressable className="p-2 border border-border rounded-lg">
+            <SlidersHorizontal size={20} color={colors.color_black} />
+          </CustomPressable>
+
+          {/* Add */}
+          <CustomPressable className="p-2 bg-primary rounded-lg">
+            <Plus size={20} color="white" />
+          </CustomPressable>
+        </View>
+
+        {/* Tabs */}
         <FlatList
           data={FILTERS}
-          renderItem={({ item }) => (
-            <Filter
-              id={item.id}
-              name={item.name}
-              selectedFilter={selectedFilter}
-              setSelectedFilter={setSelectedFilter}
-            />
-          )}
-          keyExtractor={(item) => item.id}
           horizontal
           showsHorizontalScrollIndicator={false}
-          ItemSeparatorComponent={() => <View className="w-2" />}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <FilterTab
+              item={item}
+              selected={selectedFilter}
+              onPress={setSelectedFilter}
+            />
+          )}
         />
       </View>
 
-      <Text className="font-sans-bold uppercase mb-4">Inventory</Text>
-
+      {/* List */}
       <FlatList
-        data={tools}
-        renderItem={({ item }) => <Item item={item} />}
+        data={filteredTools}
         keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <InventoryCard item={item} />}
         showsVerticalScrollIndicator={false}
-        ItemSeparatorComponent={() => <View className="h-4" />}
-        contentContainerStyle={{
-          paddingBottom: 25,
-        }}
-        className="flex-1"
+        contentContainerStyle={{ paddingBottom: 20 }}
       />
     </SafeAreaView>
   );

@@ -93,7 +93,10 @@ export default function Index() {
   }, []);
 
   return (
-    <SafeAreaView edges={["top"]} className="flex-1 bg-white pl-5 pr-5 pt-5">
+    <SafeAreaView
+      edges={["top"]}
+      className="flex-1 bg-white dark:bg-neutral-950 pl-5 pr-5 pt-5"
+    >
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentInset={{ bottom: 20 }}

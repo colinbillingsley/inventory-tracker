@@ -2,6 +2,7 @@ import { colors } from "@/constants/theme";
 import { CircleOff } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import CustomPressable from "./custom-ui/custom-pressable";
 
 export type UserCheckedOutEquipmentProps = {
   id: string;
@@ -55,11 +56,11 @@ const UserCheckedOutEquipment = ({ equipment }: ComponentProps) => {
                 location={equ.location}
               />
             ))}
-            <TouchableOpacity className="px-4 py-3 bg-primary rounded-full mt-5">
+            <CustomPressable className="px-4 py-3 bg-primary rounded-full mt-5">
               <Text className="text-white font-sans-bold text-center">
                 Check Out More Equipment
               </Text>
-            </TouchableOpacity>
+            </CustomPressable>
           </View>
         ) : (
           <View className="gap-2 items-center">
@@ -72,11 +73,11 @@ const UserCheckedOutEquipment = ({ equipment }: ComponentProps) => {
               You currently do not have any equipment checked out.
             </Text>
 
-            <TouchableOpacity className="px-4 py-3 bg-primary rounded-full w-full mt-5">
+            <CustomPressable className="px-4 py-3 bg-primary rounded-full w-full mt-5">
               <Text className="text-white font-sans-bold text-center">
                 Check Out Equipment
               </Text>
-            </TouchableOpacity>
+            </CustomPressable>
           </View>
         )}
       </View>

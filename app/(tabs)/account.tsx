@@ -1,14 +1,18 @@
+import CustomPressable from "@/components/custom-ui/custom-pressable";
 import { HOME_USER } from "@/constants/data";
 import { colors } from "@/constants/theme";
-import { Edit } from "lucide-react-native";
+import { Edit, Eye, EyeOffIcon } from "lucide-react-native";
 import { styled } from "nativewind";
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 
 const SafeAreaView = styled(RNSafeAreaView);
 
 const AccountScreen = () => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isPressed, setIsPressed] = useState(false);
+
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-white pl-5 pr-5 pt-5">
       <ScrollView
@@ -24,7 +28,10 @@ const AccountScreen = () => {
               </Text>
               <View className="h-[1px] w-full bg-subtext/35" />
             </View>
-
+            <View className="flex-row gap-2">
+              <Text className="font-sans-regular">Name:</Text>
+              <Text className="font-sans-bold">{HOME_USER.name}</Text>
+            </View>
             <View className="flex-row gap-2">
               <Text className="font-sans-regular">Email:</Text>
               <Text className="font-sans-bold">{HOME_USER.email}</Text>
@@ -34,12 +41,12 @@ const AccountScreen = () => {
               <Text className="font-sans-bold">{HOME_USER.company}</Text>
             </View>
 
-            <TouchableOpacity className="flex-row gap-2 bg-white border border-border px-2 py-3 rounded self-start mt-5">
+            <CustomPressable className="flex-row gap-2 items-center bg-white border border-border px-2 py-3 rounded self-start mt-5">
               <Edit size={18} color={colors.color_black} strokeWidth={1.5} />
               <Text className="font-sans-semibold text-center">
                 Edit Account Info
               </Text>
-            </TouchableOpacity>
+            </CustomPressable>
           </View>
 
           <View className="gap-3">
@@ -54,10 +61,10 @@ const AccountScreen = () => {
               </Text>
             </View>
 
-            <TouchableOpacity className="flex-row gap-2 bg-white border border-border px-2 py-3 rounded self-start mt-5">
+            <CustomPressable className="flex-row gap-2 items-center bg-white border border-border px-2 py-3 rounded self-start mt-5">
               <Edit size={18} color={colors.color_black} strokeWidth={1.5} />
               <Text className="font-sans-semibold text-center">Edit Roles</Text>
-            </TouchableOpacity>
+            </CustomPressable>
           </View>
 
           <View className="gap-3">
@@ -67,9 +74,35 @@ const AccountScreen = () => {
             </View>
 
             <View className="gap-4">
-              <View className="flex-row gap-2">
-                <Text className="font-sans-regular">Password:</Text>
-                <Text className="font-sans-bold">{HOME_USER.password}</Text>
+              <View className="flex-row gap-2 items-center justify-between">
+                <View className="flex-row gap-2 items-center">
+                  <Text className="font-sans-regular">Password:</Text>
+                  <Text className="font-sans-bold">
+                    {showPassword ? HOME_USER.password : "**************"}
+                  </Text>
+                </View>
+
+                <CustomPressable
+                  onPress={() => setShowPassword(!showPassword)}
+                  className={`flex-row items-center gap-2 bg-white border border-border rounded px-4 py-3`}
+                >
+                  {showPassword ? (
+                    <EyeOffIcon
+                      color={colors.color_black}
+                      strokeWidth={1.25}
+                      size={18}
+                    />
+                  ) : (
+                    <Eye
+                      color={colors.color_black}
+                      strokeWidth={1.25}
+                      size={18}
+                    />
+                  )}
+                  <Text className="font-sans-medium">
+                    {showPassword ? "Hide Password" : "Show Password"}
+                  </Text>
+                </CustomPressable>
               </View>
               <TouchableOpacity className="bg-primary px-2 py-3 rounded w-fit">
                 <Text className="font-sans-bold text-white text-center">
