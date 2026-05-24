@@ -28,12 +28,12 @@ export default function Index() {
   const [userCheckedOutEquipment, setUserCheckedOutEquipment] = useState<
     UserCheckedOutEquipmentProps[]
   >([
-    {
-      id: "1",
-      name: "Milwaulkee Core Drill",
-      serial: "#MIL-32924532",
-      location: "Wawa - Bellevue",
-    },
+    // {
+    //   id: "1",
+    //   name: "Milwaulkee Core Drill",
+    //   serial: "#MIL-32924532",
+    //   location: "Wawa - Bellevue",
+    // },
   ]);
 
   const [locationsStatus, setLocationsStatus] = useState<
@@ -85,6 +85,18 @@ export default function Index() {
     });
   }
 
+  function getGreeting() {
+    const hour = dayjs().hour();
+
+    if (hour >= 5 && hour < 12) {
+      return "Good morning";
+    } else if (hour >= 12 && hour < 17) {
+      return "Good afternoon";
+    } else {
+      return "Good evening";
+    }
+  }
+
   useEffect(() => {
     determineToolStatuses();
     setToolStatusLists();
@@ -108,16 +120,14 @@ export default function Index() {
               <Plus size={25} color={colors.color_primary} />
             </TouchableOpacity>
           </View>
-          <View>
-            <Text className="font-sans-bold text-xl mb-1">
-              {HOME_USER.company}
+          <View className="gap-1">
+            <Text className="font-sans-bold text-lg">
+              {getGreeting()}, {HOME_USER.name}
             </Text>
+            <Text className="font-sans-bold text-xl">{HOME_USER.company}</Text>
             <Text className="font-sans-semibold text-lg">
               {date.format("dddd, MMM DD")}
             </Text>
-            {/* <Text className="font-sans-extrabold text-lg">
-              Good morning, {HOME_USER.name}
-            </Text> */}
           </View>
         </View>
 

@@ -20,7 +20,7 @@ const AccountScreen = () => {
         contentInset={{ bottom: 20 }}
       >
         <Text className="font-sans-extrabold text-2xl mb-4">Your Account</Text>
-        <View className="gap-15">
+        <View className="gap-8">
           <View className="gap-3">
             <View className="mb-2">
               <Text className="font-sans-semibold text-lg mb-2">

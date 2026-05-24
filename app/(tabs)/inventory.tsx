@@ -152,7 +152,7 @@ const InventoryScreen = () => {
           <TextInput
             value={search}
             onChangeText={setSearch}
-            placeholder="Search tools..."
+            placeholder="Search inventory..."
             className="flex-1 border border-border rounded-lg p-3 font-sans-regular bg-white"
           />
 
