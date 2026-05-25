@@ -1,9 +1,19 @@
 // app/(tabs)/_layout.tsx
 import CustomTabBar from "@/components/custom-tab-bar";
 import { TAB_ICONS } from "@/constants/data";
-import { Tabs } from "expo-router";
+import { useAuth } from "@clerk/expo";
+import { Redirect, Tabs } from "expo-router";
 
 export default function TabLayout() {
+  const { isSignedIn, isLoaded } = useAuth();
+
+  if (!isLoaded) {
+    return null;
+  }
+
+  if (!isSignedIn) {
+    return <Redirect href="/(auth)/signup" />;
+  }
   return (
     <Tabs
       tabBar={(props) => <CustomTabBar {...props} />}

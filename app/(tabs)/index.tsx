@@ -7,6 +7,7 @@ import UserCheckedOutEquipment, {
 import { HOME_USER, locations, tools } from "@/constants/data";
 import { colors } from "@/constants/theme";
 import { Tool } from "@/constants/types";
+import { useUser } from "@clerk/expo";
 import dayjs from "dayjs";
 import { MapPin, Plus, Van, Wrench } from "lucide-react-native";
 import { styled } from "nativewind";
@@ -17,6 +18,7 @@ import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 const SafeAreaView = styled(RNSafeAreaView);
 
 export default function Index() {
+  const { user } = useUser();
   const [availableToolsAmount, setAvailableToolsAmount] = useState(0);
   const [checkedOutToolsAmount, setCheckedOutToolsAmount] = useState(0);
   const [outOfOrderToolsAmount, setOutOfOrderToolsAmount] = useState(0);
